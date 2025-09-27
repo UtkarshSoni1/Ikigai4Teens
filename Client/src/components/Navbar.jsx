@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <div className='h-1/15 w-full flex justify-between'>
+    <div className='h-14 w-full flex justify-between fixed z-50'>
 
-        <div className='h-full w-[40%] bg-black backdrok ml-3 mt-3 text-white flex items-center gap-20 pl-10 rounded-xl text-lg font-semibold hover:bg-[#1c1327] '>
+        <div className='h-full w-[40%] bg-white/5 backdrop-blur-lg ml-3 mt-3 text-white flex items-center gap-20 pl-10 rounded-4xl text-lg font-semibold hover:bg-[#1c1327] delay-100 duration-100 ease-in'>
             <a href="">
                 <div className='h-full w-1/5 border-white '>Home</div>
             </a>
