@@ -4,6 +4,7 @@ import Bg from './views/Bg'
 import { Route, Routes } from 'react-router-dom'
 import SignUp from './views/SignUp'
 import Login from './views/Login'
+import Alter from './views/Alter'
 const App = () => {
   return (
     <>
@@ -11,6 +12,7 @@ const App = () => {
       <Route path='/' element={<Bg/>}/>
       <Route path='/signup' element={<SignUp/>}/>
       <Route path='/login' element={<Login/>}/>
+      <Route path='/alter' element={<Alter/>}/>
     </Routes>
     </>
   )
