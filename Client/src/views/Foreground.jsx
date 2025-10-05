@@ -32,8 +32,11 @@ const Foreground = () => {
         <div className='w-1/2 h-1/4 absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/3 '>
         <img src={mainCloud} alt="" className='object-cover scale-125'/>
         </div>
-        <div className='absolute h-20 w-1/4 bottom-1/9 left-2/3 -translate-x-2/3 z-50 bg-[#0e0d60] border-2 border-[#e1ff00] flex justify-center items-center -rotate-4'>
+        <div className='absolute h-20 w-1/4 bottom-1/8 left-2/3 -translate-x-2/3 z-50 bg-[#0e0d60] border-2 border-[#e1ff00] flex justify-center items-center -rotate-4'>
             <p className='text-5xl font-black text-[white] z-50 italic tracking-tighter' style={{ fontFamily: 'kelpt, sans-serif' }}>Ikigai4Teens</p>
+        </div>
+        <div className='absolute h-20 w-[40%] bottom-4 left-2/3 -translate-x-2/3 z-50 bg-[#0e0d60] border-2 border-[#e1ff00] flex justify-center items-center -rotate-4'>
+            <p className='text-5xl font-black text-[white] z-50 italic tracking-tighter' style={{ fontFamily: 'kelpt, sans-serif' }}>CAREER STARTS HERE</p>
         </div>
         <div className='w-1/4 h-1/4  absolute top-1/2 left-7/8 -translate-x-7/8 -translate-y-1/2'>
         <img src={person3} alt="" className='object-cover scale-110'/>

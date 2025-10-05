@@ -4,14 +4,17 @@ import Background from './Background'
 import Foreground from './Foreground'
 import Bg from './Bg'
 import AboutUs from './AboutUs'
+import FAQs from './FAQs'
 
 const Alter = () => {
   return (
     <>
-        <Background/>
-        <Foreground/>
-        <AboutUs/>
+      <Background />
+      <Foreground />
+      <AboutUs />
+      <FAQs />
     </>
+    
   )
 }
 

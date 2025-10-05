@@ -20,10 +20,10 @@ const Navbar = () => {
             </a>
         </div>
         <div className='h-full w-1/8 mt-3 mr-3 text-black flex justify-center items-center gap-2'>
-            <Link to="/signUp" className='h-4/5 w-1/2 flex items-center justify-center border-2 border-black rounded-2xl'>
-            <div >Sign-up</div>      
+            <Link to="/signUp" className='h-4/5 w-1/2 flex items-center justify-center bg-white font-semibold rounded-2xl text-xl'>
+            <div >SignIn</div>      
             </Link>
-            <Link to="/login" className='h-4/5 w-1/2 flex items-center justify-center bg-[#12046b] text-white rounded-2xl font-semibold text-xl'>
+            <Link to="/login" className='h-4/5 w-1/2 flex items-center justify-center bg-black text-white rounded-2xl font-semibold text-xl'>
                 <div >Login</div>      
             </Link>
         </div>

@@ -8,7 +8,7 @@ import circle5 from "../assets/circle 5.png"
 const AboutUs = () => {
   return (
     <>
-        <div className='absolute h-screen w-full bg-[#1548d6] z-30 overflow-hidden'>
+        <div className='relative h-screen w-full bg-[#1548d6] z-30 overflow-hidden'>
             <img src={bgAbout} alt="" className='w-full max-w-full h-auto object-cover mt-40 scale-y-125 scale-x-150'/>
             <div className='absolute top-10 left-1/2 -translate-x-1/2 bg-[#1548d6] h-32 w-1/2 flex justify-center items-center'>
                 <p className='text-[6rem] text-white font-semibold'>About Us</p>
