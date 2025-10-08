@@ -1,4 +1,3 @@
-import React from 'react'
 import { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
@@ -7,6 +6,7 @@ import Matrix from '../components/Matrix';
 import bgImage2 from '../assets/gradient.png';
 import bgImage from '../assets/icon_mv_cloud_big.svg'
 import person from '../assets/icon_mv_human2.webp'
+// import { log } from 'console';
 const Login = () => {
 //   const [name, setname] = useState('');
   const [email, setemail] = useState('');
@@ -21,8 +21,15 @@ const Login = () => {
         const res = await axios.post('http://localhost:5000/login',{email, password});
         console.log(res.data);
         
-        if(res.data === "user logged in"){
-            navigate('/');
+        if(res.data.success && res.data.user){
+            const id = res.data.user?.userId || res.data.userId || res.data._id;
+            const token = res.data.user?.token;
+        
+            localStorage.setItem('token', token);
+
+            localStorage.setItem('userId', id);
+            console.log(id);
+            navigate(`/${id}`);
         }
         // else{
         //     ("Invalid email or password");

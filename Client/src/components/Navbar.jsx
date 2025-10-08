@@ -1,8 +1,27 @@
 import React from 'react'
 import { Link } from "react-router-dom";
+import { useState, useEffect } from 'react';
 import gradient from '../assets/Gradient.png';
 
 const Navbar = () => {
+
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+  // Check if user is logged in on mount
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+  
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+    setIsLoggedIn(false);
+    window.location.href = '/login';
+  };
+
   return (
     <div className='h-14 w-full flex justify-between fixed z-50'>
         <div className='h-full w-[40%] bg-black/40 backdrop-blur-lg relative  ml-3 mt-3 text-white flex items-center gap-20 pl-10 rounded-4xl text-lg font-semibold hover:bg-[#1c1327] delay-100 duration-100 ease-in overflow-hidden'>
@@ -20,14 +39,20 @@ const Navbar = () => {
                 <div className='relative h-full w-1/5 border-white z-10'>Contact</div>
             </Link>
         </div>
-        <div className='h-full w-1/8 mt-3 mr-3 text-black flex justify-center items-center gap-2'>
+        {!isLoggedIn && (<div className='h-full w-1/8 mt-3 mr-3 text-black flex justify-center items-center gap-2'>
             <Link to="/signUp" className='h-4/5 w-1/2 flex items-center justify-center bg-white font-semibold rounded-2xl text-xl'>
             <div >SignIn</div>      
             </Link>
             <Link to="/login" className='h-4/5 w-1/2 flex items-center justify-center bg-black text-white rounded-2xl font-semibold text-xl'>
                 <div >Login</div>      
             </Link>
-        </div>
+        </div>)}
+        {isLoggedIn && (<div className='h-full w-1/8 mt-3 mr-3 text-white flex justify-center items-center gap-2'>
+            <Link to="/logout" className='h-4/5 w-1/2 flex items-center justify-center bg-black font-semibold rounded-2xl text-xl'>
+            <div >Logout</div>      
+            </Link>
+            
+        </div>)}
       </div>
   )
 }

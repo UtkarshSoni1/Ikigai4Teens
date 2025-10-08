@@ -24,7 +24,15 @@ const ChatInterface = () => {
     e.target.style.height = 'auto';
     e.target.style.height = e.target.scrollHeight + 'px';
   };
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+    
+    // Check if user is logged in on mount
+    useEffect(() => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        setIsLoggedIn(true);
+      }
+    }, []);
   // Handle send message
   const handleSend = () => {
     if (!input.trim()) return;
@@ -57,11 +65,12 @@ const ChatInterface = () => {
   };
 
   return (
+    
     <div className='relative h-screen w-full flex flex-col'>
-      {/* Background */}
+      
       <img src={gradient} alt="" className='absolute inset-0 h-full w-full object-cover -z-10'/>
       
-      {/* Main chat area */}
+      
       <div className='flex-1 overflow-y-auto px-4 py-6'>
         {messages.length === 0 ? (
           // Welcome screen
@@ -100,7 +109,7 @@ const ChatInterface = () => {
         )}
       </div>
       
-      {/* Input area */}
+     
       <div className='sticky bottom-0 w-full px-4 py-6 bg-gradient-to-t from-black/50 to-transparent'>
         <div className='max-w-3xl mx-auto bg-[#2d2d2d] rounded-3xl px-6 py-4 flex items-end gap-3 shadow-2xl'>
           <textarea 
