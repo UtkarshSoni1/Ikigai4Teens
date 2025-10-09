@@ -2,7 +2,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
-import Matrix from '../components/Matrix';
+// import Matrix from '../components/Matrix';
+import { ToastContainer, toast } from 'react-toastify';
 import bgImage2 from '../assets/gradient.png';
 import bgImage from '../assets/icon_mv_cloud_big.svg'
 import person from '../assets/icon_mv_human2.webp'
@@ -14,11 +15,11 @@ const Login = () => {
 //   const [passwordC, setpasswordc] = useState('');
 
     const navigate = useNavigate();
-
+    const notify = () => toast('Logged in successfully !');
   const submitHandler = async (e) => {
         e.preventDefault();
         
-        const res = await axios.post('http://localhost:5000/login',{email, password});
+        const res = await axios.post('http://localhost:5000/login',{email, password},{ withCredentials: true });
         console.log(res.data);
         
         if(res.data.success && res.data.user){
@@ -61,7 +62,7 @@ const Login = () => {
             </div>
             
             {/* <input type="submit" value="Register"  className='mt-10 h-16 w-50 bg-blue-400 rounded-2xl text-2xl text-white' /> */}
-            <Button type="submit" />
+            <Button type="submit" onClick={notify} />
             <Link to={'/signup'} className='text-white text-md hover:text-blue-900 hover:underline mt-10'>New here? Create your account</Link>
           </form> 
           <div className='relative h-full w-[60%] overflow-hidden bg-blue-400/40'>

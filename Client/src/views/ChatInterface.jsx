@@ -65,7 +65,6 @@ const ChatInterface = () => {
   };
 
   return (
-    
     <div className='relative h-screen w-full flex flex-col'>
       
       <img src={gradient} alt="" className='absolute inset-0 h-full w-full object-cover -z-10'/>

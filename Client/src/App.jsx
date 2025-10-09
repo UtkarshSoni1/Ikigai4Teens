@@ -3,7 +3,7 @@ import Home from './views/Home';
 import { Route, Routes } from 'react-router-dom'
 import SignUp from './views/SignUp'
 import Login from './views/Login'
-import { SignupForm } from './components/signup-form'
+// import { SignupForm } from './components/signup-form'
 // import SignupPage from './views/page'
 import ChatInterface from './views/ChatInterface'
 const App = () => {

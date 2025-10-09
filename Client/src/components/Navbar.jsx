@@ -1,7 +1,8 @@
 import React from 'react'
-import { Link } from "react-router-dom";
+import { Link,  useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import gradient from '../assets/Gradient.png';
+import axios from 'axios';
 
 const Navbar = () => {
 
@@ -15,11 +16,20 @@ const Navbar = () => {
     }
   }, []);
   
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userId');
-    setIsLoggedIn(false);
-    window.location.href = '/login';
+  const handleLogout = async () => {
+
+    const res = await axios.post('http://localhost:5000/logout',{},{ withCredentials: true });
+
+    if(res.data.success){
+      localStorage.removeItem('token');
+      localStorage.removeItem('userId');
+      sessionStorage.clear();
+      setIsLoggedIn(false);
+
+        // Redirect to login page
+      navigate('/login');
+    }
+    // window.location.href = '/login';
   };
 
   return (
@@ -48,7 +58,7 @@ const Navbar = () => {
             </Link>
         </div>)}
         {isLoggedIn && (<div className='h-full w-1/8 mt-3 mr-3 text-white flex justify-center items-center gap-2'>
-            <Link to="/logout" className='h-4/5 w-1/2 flex items-center justify-center bg-black font-semibold rounded-2xl text-xl'>
+            <Link to="/"  onClick={handleLogout} className='h-4/5 w-1/2 flex items-center justify-center bg-black font-semibold rounded-2xl text-xl'>
             <div >Logout</div>      
             </Link>
             

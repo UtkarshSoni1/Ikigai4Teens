@@ -9,7 +9,10 @@ import connection from './config/DB-connection.js';
 import isLoggedIn from './middlewares/isLoggedIn.js';
 const port = process.env.port || 5000;
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173', // Change to your frontend URL if different
+    credentials: true
+}));
 // Body parsers to populate req.body for JSON and form submissions
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -26,6 +29,7 @@ app.get('/chat',isLoggedIn,(req, res) => {
     
     res.send(`Welcome to the chat, ${req.user.name}`);
 });
+app.post('/logout', authControl.userLogout);
 app.listen(port,()=>{
     console.log("Server is runnung");
     

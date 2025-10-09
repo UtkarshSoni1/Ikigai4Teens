@@ -2,9 +2,10 @@ import React from 'react'
 import { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 // import man from '../assets/man1.png'
 import Button from '../components/Button';
-import Matrix from '../components/Matrix';
+// import Matrix from '../components/Matrix';
 import bgImage from '../assets/icon_mv_cloud_big.svg'
 import person from '../assets/icon_mv_human3.webp'
 import bgImage2 from '../assets/Gradient.png'
@@ -17,15 +18,19 @@ const SignUp = () => {
   const [passwordC, setpasswordc] = useState('');
 
   const navigate = useNavigate();
-
+  const notify = () => toast('Wow so easy !');
   const submitHandler = async (e) => {
         e.preventDefault();
         if (password === passwordC) {
-          const res = await axios.post('http://localhost:5000/signUp',{name, email, password});
-          console.log(res.data);
-          navigate('/');
-          setemail('');
-          setpassword('');
+          const res = await axios.post('http://localhost:5000/signUp',{name, email, password},{ withCredentials: true });
+          const id = res.data.user?.userId || res.data.userId || res.data._id;
+          const token = res.data.user?.token;
+      
+          localStorage.setItem('token', token);
+
+          localStorage.setItem('userId', id);
+          console.log(id);
+          navigate(`/${id}`);
           // console.log(email, password);
         }
         
@@ -63,7 +68,7 @@ const SignUp = () => {
                 onChange={(e)=>{setpasswordc(e.target.value)}}/>
               </div>
               {/* <input type="submit" value="Register"  className='mt-10 h-16 w-50 bg-blue-400 rounded-2xl text-2xl text-white' /> */}
-              <Button type='submit'/>
+              <Button type='submit' onclick={notify}/>
               <Link to={'/login'} className='text-white text-md hover:text-blue-900 hover:underline mt-2'>Have an account? Log in</Link>
             </form> 
 

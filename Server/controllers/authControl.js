@@ -27,7 +27,16 @@ const userRegister = async (req, res) => {
     const token = await generateToken(Createduser);
     res.cookie("token", token);
     // req.flash('success', 'Registration successful!');
-    return res.json(Createduser);
+    res.status(200).json({
+          success: true,
+          message: "Signup successful",
+          user: {
+            userId: user._id,
+            email: user.email,
+            name: user.name,
+            token: token,
+          },
+        });
   } catch (err) {
     res.send(err.message);
   }
@@ -48,10 +57,14 @@ const userLogin = async (req, res) => {
       }
       if (result) {
         const token = generateToken(user);
-        res.cookie("token", token);
-        // req.flash('success', 'Log
-        // in successful!');
-        // return res.redirect(`/`);
+        // THIS IS THE FIX - Add cookie options
+        res.cookie("token", token, {
+          httpOnly: true,        // Prevents client-side JS access
+          secure: false,         // false for localhost, true for production HTTPS
+          sameSite: 'lax',       // 'lax' for localhost, 'none' for cross-domain
+          path: '/',             // Cookie available across site
+          maxAge: 60 * 60 * 1000 // 1 hour (matches JWT expiry)
+        });
         res.status(200).json({
           success: true,
           message: "Login successful",
@@ -72,5 +85,28 @@ const userLogin = async (req, res) => {
     res.redirect("Login failed:");
   }
 };
+const userLogout = async (req, res) => {
+  try {
+    // Clear the cookie with the SAME options used when setting it
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: false,      // Must match login cookie settings
+      sameSite: 'lax',    // Must match login cookie settings
+      path: '/'           // Must match login cookie settings
+    });
 
-export default { userLogin, userRegister };
+    res.status(200).json({
+      success: true,
+      message: "Logout successful"
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "Logout failed: " + err.message
+    });
+  }
+};
+
+
+
+export default { userLogin, userRegister, userLogout};
