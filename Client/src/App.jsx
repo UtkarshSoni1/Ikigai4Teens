@@ -6,6 +6,7 @@ import Login from './views/Login'
 // import { SignupForm } from './components/signup-form'
 // import SignupPage from './views/page'
 import ChatInterface from './views/ChatInterface'
+import Dashboard from './views/Dashboard';
 const App = () => {
   return (
     <>
@@ -17,6 +18,7 @@ const App = () => {
       {/* <Route path='/alter' element={<Alter/>}/> */}
       <Route path='/alterSign' element={<SignUp/>}/>
       <Route path='/chat' element={<ChatInterface/>}/>
+      <Route path='/dashboard' element={<Dashboard/>}/>
     </Routes>
     </>
   )
