@@ -22,7 +22,7 @@ const isLoggedIn = async (req, res, next) => {
     req.user = user; 
     next();
   } catch (err) {
-    req.flash('error', 'something went wrong');
+    // req.flash('error', 'something went wrong');
     return res.redirect('/');
   }
 };

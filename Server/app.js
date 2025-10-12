@@ -7,6 +7,7 @@ const app = express();
 import authControl from './controllers/authControl.js';
 import connection from './config/DB-connection.js';
 import isLoggedIn from './middlewares/isLoggedIn.js';
+import AiResponse from './config/GenAiConfig.js';
 const port = process.env.port || 5000;
 
 app.use(cors({
@@ -29,6 +30,7 @@ app.get('/chat',isLoggedIn,(req, res) => {
     
     res.send(`Welcome to the chat, ${req.user.name}`);
 });
+app.post('/ai',AiResponse);
 app.post('/logout', authControl.userLogout);
 app.listen(port,()=>{
     console.log("Server is runnung");

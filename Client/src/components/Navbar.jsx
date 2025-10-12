@@ -1,35 +1,22 @@
 import React from 'react'
 import { Link,  useNavigate } from "react-router-dom";
-import { useState, useEffect } from 'react';
+// import { useState, useEffect } from 'react';
 import gradient from '../assets/Gradient.png';
 import axios from 'axios';
 
 const Navbar = () => {
 
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
-  // Check if user is logged in on mount
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      setIsLoggedIn(true);
-    }
-  }, []);
+    const navigate = useNavigate();
+    const isLoggedIn = !!localStorage.getItem('token');
   
   const handleLogout = async () => {
-
-    const res = await axios.post('http://localhost:5000/logout',{},{ withCredentials: true });
-
-    if(res.data.success){
+    const res = await axios.post('http://localhost:5000/logout', {}, { withCredentials: true });
+    if (res.data.success) {
       localStorage.removeItem('token');
       localStorage.removeItem('userId');
       sessionStorage.clear();
-      setIsLoggedIn(false);
-
-        // Redirect to login page
       navigate('/login');
     }
-    // window.location.href = '/login';
   };
 
   return (
