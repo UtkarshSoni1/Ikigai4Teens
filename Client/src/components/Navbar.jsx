@@ -1,23 +1,57 @@
-import React from 'react'
-import { Link,  useNavigate } from "react-router-dom";
-// import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
+import { Link, useNavigate } from "react-router-dom";
 import gradient from '../assets/Gradient.png';
 import axios from 'axios';
+
+// Create axios instance with default config
+const api = axios.create({
+  baseURL: 'http://localhost:5000',
+  withCredentials: true
+});
 
 const Navbar = () => {
 
     const navigate = useNavigate();
-    const isLoggedIn = !!localStorage.getItem('token');
+    const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
+
+    useEffect(() => {
+      const update = () => setIsLoggedIn(!!localStorage.getItem('token'));
+      update();
+      window.addEventListener('storage', update);
+      return () => window.removeEventListener('storage', update);
+    }, []);
   
-  const handleLogout = async () => {
-    const res = await axios.post('http://localhost:5000/logout', {}, { withCredentials: true });
-    if (res.data.success) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('userId');
-      sessionStorage.clear();
-      navigate('/login');
+    const handleLogout = async () => {
+      try {
+        await axios.post('http://localhost:5000/logout', {}, { withCredentials: true });
+      } catch (e) {
+        // ignore network error, still clear client-side
+        console.log(e);
+        
+      } finally {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userId');
+        sessionStorage.clear();
+        setIsLoggedIn(false);
+        navigate('/login');
+      }
+    };
+
+    const handleChat = async () => {
+        try {
+            const response = await api.get('/chat');
+            if (response.data.success) {
+                navigate(`/chat`);
+            }
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                // Unauthorized, redirect to login
+                navigate('/login');
+            } else {
+                console.error('Error accessing chat:', error);
+            }
+        }
     }
-  };
 
   return (
     <div className='h-14 w-full flex justify-between fixed z-50'>
@@ -26,8 +60,10 @@ const Navbar = () => {
             <Link>
                 <div className='relative h-full w-1/5 border-white z-10'>Home</div>
             </Link>
-            <Link to="/chat">
-                <div className='relative h-full w-1/5 border-white z-10'>Guidance</div>
+            <Link to='/chat' onClick={handleChat}>
+                <div  className='relative h-full w-1/5 border-white z-10 cursor-pointer'>
+                    Guidance
+                </div>
             </Link>
             <Link to='/about'>
                 <div className='relative h-full w-1/5 border-white text-nowrap z-10'>About Us</div>
@@ -36,20 +72,23 @@ const Navbar = () => {
                 <div className='relative h-full w-1/5 border-white z-10'>Contact</div>
             </Link>
         </div>
-        {!isLoggedIn && (<div className='h-full w-1/8 mt-3 mr-3 text-black flex justify-center items-center gap-2'>
-            <Link to="/signUp" className='h-4/5 w-1/2 flex items-center justify-center bg-white font-semibold rounded-2xl text-xl'>
-            <div >SignIn</div>      
+        {!isLoggedIn && (
+          <div className='h-full mt-3 mr-3 text-black flex items-center gap-2'>
+            <Link to="/signUp" className='h-4/5 px-3 flex items-center justify-center bg-white font-semibold rounded-2xl text-xl'>
+              SignIn
             </Link>
-            <Link to="/login" className='h-4/5 w-1/2 flex items-center justify-center bg-black text-white rounded-2xl font-semibold text-xl'>
-                <div >Login</div>      
+            <Link to="/login" className='h-4/5 px-3 flex items-center justify-center bg-black text-white rounded-2xl font-semibold text-xl'>
+              Login
             </Link>
-        </div>)}
-        {isLoggedIn && (<div className='h-full w-1/8 mt-3 mr-3 text-white flex justify-center items-center gap-2'>
-            <Link to="/"  onClick={handleLogout} className='h-4/5 w-1/2 flex items-center justify-center bg-black font-semibold rounded-2xl text-xl'>
-            <div >Logout</div>      
-            </Link>
-            
-        </div>)}
+          </div>
+        )}
+        {isLoggedIn && (
+          <div className='h-full mt-3 mr-3 text-white flex items-center gap-2'>
+            <button onClick={handleLogout} className='h-4/5 px-4 flex items-center justify-center bg-black font-semibold rounded-2xl text-xl'>
+              Logout
+            </button>
+          </div>
+        )}
       </div>
   )
 }

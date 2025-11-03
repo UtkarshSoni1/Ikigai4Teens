@@ -8,7 +8,10 @@ const isLoggedIn = async (req, res, next) => {
     const token = req.cookies.token;
 
     if (!token) {
-      return res.redirect('/login'); 
+      return res.status(401).json({
+        success: false,
+        message: 'Authentication required'
+      });
     }
     
     const decoded = jwt.verify(token, process.env.JWT_KEY);
@@ -16,7 +19,10 @@ const isLoggedIn = async (req, res, next) => {
     const user = await userModel.findOne({email : decoded.email})
         .select("-password");
     if (!user) {
-      return res.send('you are not logged In'); 
+      return res.status(401).json({
+        success: false,
+        message: 'User not found'
+      });
     }
 
     req.user = user; 
