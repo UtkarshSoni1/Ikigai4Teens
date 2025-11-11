@@ -18,23 +18,62 @@ const SignUp = () => {
   const [passwordC, setpasswordc] = useState('');
 
   const navigate = useNavigate();
-  const notify = () => toast('Wow so easy !');
-  const submitHandler = async (e) => {
-        e.preventDefault();
-        if (password === passwordC) {
-          const res = await axios.post('http://localhost:5000/signUp',{name, email, password},{ withCredentials: true });
-          const id = res.data.user?.userId || res.data.userId || res.data._id;
-          const token = res.data.user?.token;
-      
-          localStorage.setItem('token', token);
 
-          localStorage.setItem('userId', id);
-          console.log(id);
-          navigate(`/${id}`);
-          // console.log(email, password);
-        }
-        
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    
+    try {
+      // First validate the form
+      if (!name || !email || !password || !passwordC) {
+        toast.error('Please fill in all fields');
+        return;
+      }
+
+      if (password !== passwordC) {
+        toast.error('Passwords do not match');
+        return;
+      }
+
+      if (password.length < 6) {
+        toast.error('Password must be at least 6 characters long');
+        return;
+      }
+
+      // Show loading toast
+      const loadingToast = toast.loading('Creating your account...');
+
+      const res = await axios.post('http://localhost:5000/signUp', 
+        { name, email, password }, 
+        { withCredentials: true }
+      );
+
+      // Dismiss loading toast
+      toast.dismiss(loadingToast);
+
+      if (res.data.success && res.data.user) {
+        const id = res.data.user?.userId || res.data.userId || res.data._id;
+        const token = res.data.user?.token;
+    
+        localStorage.setItem('token', token);
+        localStorage.setItem('userId', id);
+        localStorage.setItem('userName', name);
+
+        toast.success('Account created successfully!');
+        navigate(`/${id}`);
+      } else {
+        toast.error('Something went wrong. Please try again.');
+      }
+    } catch (error) {
+      console.error('Signup error:', error);
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else if (error.message.includes('Network')) {
+        toast.error('Network error. Please check your connection.');
+      } else {
+        toast.error('Failed to create account. Please try again.');
+      }
     }
+  }
 
   return (
     <>
@@ -68,7 +107,7 @@ const SignUp = () => {
                 onChange={(e)=>{setpasswordc(e.target.value)}}/>
               </div>
               {/* <input type="submit" value="Register"  className='mt-10 h-16 w-50 bg-blue-400 rounded-2xl text-2xl text-white' /> */}
-              <Button type='submit' onclick={notify}/>
+              <Button type='submit' />
               <Link to={'/login'} className='text-white text-md hover:text-blue-900 hover:underline mt-2'>Have an account? Log in</Link>
             </form> 
 

@@ -28,8 +28,11 @@ const isLoggedIn = async (req, res, next) => {
     req.user = user; 
     next();
   } catch (err) {
-    // req.flash('error', 'something went wrong');
-    return res.redirect('/');
+    console.error('Auth error:', err);
+    return res.status(401).json({
+      success: false,
+      message: 'Invalid or expired token'
+    });
   }
 };
 

@@ -1,21 +1,56 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+gsap.registerPlugin(ScrollTrigger)
 
 const FAQs = () => {
   const [openItem, setOpenItem] = useState("item-1");
+  const headingRef = useRef(null)
+  const accordionContainerRef = useRef(null)
+
+  useEffect(() => {
+    const heading = headingRef.current
+    const container = accordionContainerRef.current
+    if (!heading || !container) return
+
+    const items = Array.from(container.querySelectorAll('.rounded-3xl'))
+
+    // set initial states
+    gsap.set(heading, { opacity: 0, y: 24 })
+    gsap.set(items, { opacity: 0, y: 50 })
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#faqs-section',
+        start: 'top 85%',
+        end: 'top 30%',
+        toggleActions: 'play none none reverse',
+      },
+      defaults: { ease: 'power2.out' }
+    })
+
+    tl.to(heading, { opacity: 1, y: 0, duration: 0.6 })
+      .to(items, { opacity: 1, y: 24, duration: 0.6, stagger: 0.2 }, '-=0.3')
+
+    return () => {
+      if (tl.scrollTrigger) tl.scrollTrigger.kill()
+      tl.kill()
+    }
+  }, [])
 
   return (
     <>
-      <div className="relative h-screen w-full bg-transparent flex items-center z-30">
+      <div id="faqs-section" className="relative h-screen w-full bg-transparent flex items-center z-30">
         <div className="h-full w-1/2 flex justify-center items-center text-[5rem] font-bold text-white">
-          <p>FAQs</p>
+          <p ref={headingRef}>FAQs</p>
         </div>
-        <div className="h-full w-1/2 flex flex-col items-center justify-center gap-3">
+        <div ref={accordionContainerRef} className="h-full w-1/2 flex flex-col items-center justify-center gap-3">
           <Accordion
             type="single"
             collapsible

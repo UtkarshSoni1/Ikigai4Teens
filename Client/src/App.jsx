@@ -3,10 +3,10 @@ import Home from './views/Home';
 import { Route, Routes } from 'react-router-dom'
 import SignUp from './views/SignUp'
 import Login from './views/Login'
-// import { SignupForm } from './components/signup-form'
-// import SignupPage from './views/page'
 import ChatInterface from './views/ChatInterface'
 import Dashboard from './views/Dashboard';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const App = () => {
   return (
     <>
@@ -15,11 +15,22 @@ const App = () => {
       <Route path='/:userId' element={<Home/>}/>
       <Route path='/signup' element={<SignUp/>}/>
       <Route path='/login' element={<Login/>}/>
-      {/* <Route path='/alter' element={<Alter/>}/> */}
       <Route path='/alterSign' element={<SignUp/>}/>
       <Route path='/chat' element={<ChatInterface/>}/>
       <Route path='/dashboard' element={<Dashboard/>}/>
     </Routes>
+    <ToastContainer
+      position="top-right"
+      autoClose={3000}
+      hideProgressBar={false}
+      newestOnTop
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="dark"
+    />
     </>
   )
 }

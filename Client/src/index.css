@@ -132,6 +132,7 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    box-sizing: border-box;
   }
   body {
     @apply bg-background text-foreground;
@@ -141,3 +142,19 @@
     overflow-x: hidden;
   }
 }
+
+/* Floating / bounce animations for foreground elements */
+@keyframes float-main { 0% { transform: scale(1.25) translateY(0);} 50% { transform: scale(1.25) translateY(-8px);} 100% { transform: scale(1.25) translateY(0);} }
+@keyframes float-large { 0% { transform: scale(2) translateY(0);} 50% { transform: scale(2) translateY(-10px);} 100% { transform: scale(2) translateY(0);} }
+@keyframes float-person-a { 0% { transform: scale(1.1) translateY(0);} 50% { transform: scale(1.1) translateY(-4px);} 100% { transform: scale(1.1) translateY(0);} }
+@keyframes float-person-b { 0% { transform: scale(1.25) translateY(0);} 50% { transform: scale(1.25) translateY(-6px);} 100% { transform: scale(1.25) translateY(0);} }
+@keyframes float-small { 0% { transform: translateY(0);} 50% { transform: translateY(-2px);} 100% { transform: translateY(0);} }
+
+.float-maincloud { animation: float-main 4s ease-in-out infinite; }
+.float-leftcloud, .float-rightcloud { animation: float-large 4.5s ease-in-out infinite; }
+.float-person1 { animation: float-person-a 3.6s ease-in-out infinite; }
+.float-person2 { animation: float-person-b 3.8s ease-in-out infinite; }
+.float-person3 { animation: float-person-a 3.4s ease-in-out infinite; }
+.float-icon { animation: float-small 3s ease-in-out infinite; }
+.float-icon:nth-child(2) { animation-duration: 3.5s; animation-delay: 0.2s; }
+.float-icon:nth-child(3) { animation-duration: 2.8s; animation-delay: 0.4s; }
