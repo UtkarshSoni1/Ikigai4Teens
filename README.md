@@ -119,3 +119,25 @@ Acknowledgements
 
 Ready to run?
 - After following the steps above the app should be available at `http://localhost:5173` and you can sign up, login, and try the chat. If you want, I can also add a simple `docs/CONTRIBUTING.md`, CI badge, or a script to run both servers concurrently.
+
+## Screenshots
+
+- `Client/src/assets/screenshots/Home.png` — site landing / home view
+- `Client/src/assets/screenshots/AboutUs.png` — About Us section
+- `Client/src/assets/screenshots/chat.png` — Chat interface
+- `Client/src/assets/screenshots/dashboard.png` — Dashboard
+- `Client/src/assets/screenshots/FAQs.png` — FAQs
+
+
+
+![Home view](Client/src/assets/screenshots/home.png)
+
+![About section](Client/src/assets/screenshots/about.png)
+
+![Chat interface](Client/src/assets/screenshots/chat.png)
+
+![FAQs](Client/src/assets/screenshots/FAQs.png)
+
+![Dashboard](Client/src/assets/screenshots/dashboard.png)
+
+I
