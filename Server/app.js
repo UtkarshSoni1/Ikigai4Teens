@@ -5,6 +5,11 @@ import cookieParser from 'cookie-parser';
 import authControl from './controllers/authControl.js';
 import connection from './config/DB-connection.js';
 import isLoggedIn from './middlewares/isLoggedIn.js';
+import { authLimiter, apiLimiter } from './middlewares/rateLimit.js';
+import { applySecurity } from './middlewares/security.js';
+import { notFoundHandler, errorHandler } from './middlewares/errorHandler.js';
+import { validate } from './middlewares/validate.js';
+import { signupSchema, loginSchema } from './validators/authValidation.js';
 import AiResponse from './config/GenAiConfig.js';
 import Chat from './models/chatModel.js';
 import dotenv from 'dotenv';
@@ -13,6 +18,9 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
+
+// Apply security middlewares
+applySecurity(app);
 
 app.use(cors({
     origin: 'http://localhost:5173',
@@ -25,14 +33,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+// Rate limiting
+app.use('/auth', authLimiter);
+app.use('/api', apiLimiter);
+
 connection();
 
 app.get('/',(req, res) => {
     res.send("Server  is live");
 })
 
-app.post('/signUp',authControl.userRegister);
-app.post('/login',authControl.userLogin);
+app.post('/signUp', validate(signupSchema), authControl.userRegister);
+app.post('/login', validate(loginSchema), authControl.userLogin);
 app.get('/chat', isLoggedIn, async (req, res) => {
     try {
         const chat = await Chat.findOne({ user: req.user._id });
@@ -58,6 +70,10 @@ app.get('/user/profile', isLoggedIn, (req, res) => {
         }
     });
 });
+
+// 404 + Global error handlers (must be after all routes)
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
