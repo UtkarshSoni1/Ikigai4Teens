@@ -18,16 +18,20 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
-
-// Apply security middlewares
-applySecurity(app);
-
-app.use(cors({
-    origin: 'http://localhost:5173',
+const clientOrigin = process.env.CLIENT_URL || 'http://localhost:5173';
+const corsOptions = {
+    origin: clientOrigin,
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    optionsSuccessStatus: 204
+};
+
+app.use(cors(corsOptions));
+app.options(/.*/, cors(corsOptions));
+
+// Apply security middlewares after CORS so preflight requests always receive CORS headers
+applySecurity(app);
 // Body parsers to populate req.body for JSON and form submissions
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

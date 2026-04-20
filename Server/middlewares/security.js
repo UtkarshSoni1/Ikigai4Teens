@@ -1,6 +1,44 @@
 import helmet from 'helmet';
 import mongoSanitize from 'express-mongo-sanitize';
-import xssClean from 'xss-clean';
+import xssFilters from 'xss-filters';
+
+const sanitizeXssValue = (value) => {
+    if (typeof value === 'string') {
+        return xssFilters.inHTMLData(value).trim();
+    }
+
+    if (Array.isArray(value)) {
+        return value.map(sanitizeXssValue);
+    }
+
+    if (value && typeof value === 'object') {
+        return Object.fromEntries(
+            Object.entries(value).map(([key, nestedValue]) => [key, sanitizeXssValue(nestedValue)])
+        );
+    }
+
+    return value;
+};
+
+const sanitizeMutableRequestData = (req, res, next) => {
+    ['body', 'params', 'headers'].forEach((key) => {
+        if (req[key]) {
+            req[key] = mongoSanitize.sanitize(req[key]);
+        }
+    });
+
+    next();
+};
+
+const sanitizeMutableXssData = (req, res, next) => {
+    ['body', 'params'].forEach((key) => {
+        if (req[key]) {
+            req[key] = sanitizeXssValue(req[key]);
+        }
+    });
+
+    next();
+};
 
 /**
  * Apply comprehensive security middlewares to the Express app
@@ -13,9 +51,9 @@ export const applySecurity = (app) => {
     // Disable x-powered-by header to hide Express fingerprint
     app.disable('x-powered-by');
 
-    // MongoDB Sanitization: Prevent NoSQL injection
-    app.use(mongoSanitize());
+    // Express 5 exposes req.query as a getter-only property, so sanitize only mutable request objects.
+    app.use(sanitizeMutableRequestData);
 
-    // XSS Protection: Clean user input to prevent XSS attacks
-    app.use(xssClean());
+    // xss-clean also mutates req.query, so sanitize only mutable request objects here too.
+    app.use(sanitizeMutableXssData);
 };
