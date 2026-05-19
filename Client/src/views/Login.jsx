@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
 // import Matrix from '../components/Matrix';
 import { ToastContainer, toast } from 'react-toastify';
-import bgImage2 from '../assets/gradient.png';
+import bgImage2 from '../assets/Gradient.png';
 import bgImage from '../assets/icon_mv_cloud_big.svg'
 import person from '../assets/icon_mv_human2.webp'
 // import { log } from 'console';
