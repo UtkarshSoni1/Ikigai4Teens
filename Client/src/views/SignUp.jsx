@@ -42,7 +42,7 @@ const SignUp = () => {
       // Show loading toast
       const loadingToast = toast.loading('Creating your account...');
 
-      const res = await axios.post('http://localhost:5000/signUp', 
+      const res = await axios.post('https://ikigai4teens.onrender.com/', 
         { name, email, password }, 
         { withCredentials: true }
       );
