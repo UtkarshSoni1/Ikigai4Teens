@@ -1,7 +1,12 @@
 import axios from 'axios';
 
+const isLocalHost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+const API_BASE_URL = isLocalHost
+    ? 'http://localhost:5000'
+    : 'https://ikigai4teens.onrender.com';
+
 const api = axios.create({
-    baseURL: 'http://localhost:5000',
+    baseURL: API_BASE_URL,
     withCredentials: true,
     headers: {
         'Content-Type': 'application/json'

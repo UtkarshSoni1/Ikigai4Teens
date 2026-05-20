@@ -12,10 +12,11 @@ export const validate = (schema) => (req, res, next) => {
     return next();
   } catch (err) {
     if (err instanceof ZodError) {
+      const errors = err.issues || err.errors || [];
       return res.status(400).json({
         success: false,
-        message: 'Validation failed',
-        errors: err.errors
+        message: errors[0]?.message || 'Validation failed',
+        errors
       });
     }
     return next(err);

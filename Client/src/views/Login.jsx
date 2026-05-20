@@ -20,6 +20,11 @@ const Login = () => {
         e.preventDefault();
         
         try {
+            if (!email || !password) {
+                toast.error('Please enter your email and password.');
+                return;
+            }
+
             const res = await api.post('/login', { email, password });
             console.log('Login Response:', res.data);
             
@@ -55,10 +60,12 @@ const Login = () => {
                 // Dispatch a custom event to notify components about login
                 window.dispatchEvent(new Event('login'));
                 navigate('/');
+            } else {
+                toast.error(res.data?.message || 'Login failed. Please try again.');
             }
         } catch (error) {
             console.error('Login error:', error);
-            toast.error('Login failed. Please try again.');
+            toast.error(error.response?.data?.errors?.[0]?.message || error.response?.data?.message || 'Login failed. Please try again.');
         } finally {
             setemail('');
             setpassword('');

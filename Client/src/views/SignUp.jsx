@@ -1,8 +1,8 @@
 import React from 'react'
 import { useState } from 'react';
-import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import api from '../utils/api';
 // import man from '../assets/man1.png'
 import Button from '../components/Button';
 // import Matrix from '../components/Matrix';
@@ -42,10 +42,7 @@ const SignUp = () => {
       // Show loading toast
       const loadingToast = toast.loading('Creating your account...');
 
-      const res = await axios.post('https://ikigai4teens.onrender.com/', 
-        { name, email, password }, 
-        { withCredentials: true }
-      );
+      const res = await api.post('/signUp', { name, email, password });
 
       // Dismiss loading toast
       toast.dismiss(loadingToast);
@@ -61,11 +58,13 @@ const SignUp = () => {
         toast.success('Account created successfully!');
         navigate(`/${id}`);
       } else {
-        toast.error('Something went wrong. Please try again.');
+        toast.error(res.data?.message || 'Something went wrong. Please try again.');
       }
     } catch (error) {
       console.error('Signup error:', error);
-      if (error.response?.data?.message) {
+      if (error.response?.data?.errors?.[0]?.message) {
+        toast.error(error.response.data.errors[0].message);
+      } else if (error.response?.data?.message) {
         toast.error(error.response.data.message);
       } else if (error.message.includes('Network')) {
         toast.error('Network error. Please check your connection.');

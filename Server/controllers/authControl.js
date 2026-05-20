@@ -11,10 +11,14 @@ import generateToken from "./generateToken.js";
 const userRegister = async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    // let user = await userModel.findOne({email: email});
-    // if(user){
-    //     return res.redirect('/users/login');
-    // }
+    let existingUser = await userModel.findOne({ email });
+    if (existingUser) {
+      return res.status(409).json({
+        success: false,
+        message: "Email is already registered",
+      });
+    }
+
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
 
@@ -43,7 +47,11 @@ const userRegister = async (req, res) => {
           },
         });
   } catch (err) {
-    res.send(err.message);
+    const isDuplicateEmail = err?.code === 11000 && err?.keyPattern?.email;
+    res.status(isDuplicateEmail ? 409 : 500).json({
+      success: false,
+      message: isDuplicateEmail ? "Email is already registered" : "Signup failed: " + err.message,
+    });
   }
 };
 
@@ -52,13 +60,17 @@ const userLogin = async (req, res) => {
     let { email, password } = req.body;
     let user = await userModel.findOne({ email: email });
     if (!user) {
-      // req.flash('error', 'User not found, please register');
-      return res.redirect("/signUp");
+      return res.status(404).json({
+        success: false,
+        message: "User not found, please register",
+      });
     }
     await bcrypt.compare(password, user.password, async (err, result) => {
       if (err) {
-        // req.flash('error', 'Email or password incorrect');
-        return res.json("error - user not exist");
+        return res.status(500).json({
+          success: false,
+          message: "Login failed. Please try again.",
+        });
       }
       if (result) {
         const token = generateToken(user);
@@ -81,13 +93,17 @@ const userLogin = async (req, res) => {
           },
         });
       } else {
-        // req.flash('error', 'Email or password incorrect');
-        return res.json("Error - Email or password incorrect");
+        return res.status(401).json({
+          success: false,
+          message: "Email or password incorrect",
+        });
       }
     });
   } catch (err) {
-    // req.flash('error', 'Login failed: ' + err.message);
-    res.redirect("Login failed:");
+    res.status(500).json({
+      success: false,
+      message: "Login failed: " + err.message,
+    });
   }
 };
 const userLogout = async (req, res) => {
