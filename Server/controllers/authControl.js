@@ -77,8 +77,8 @@ const userLogin = async (req, res) => {
         // THIS IS THE FIX - Add cookie options
         res.cookie("token", token, {
           httpOnly: true,        // Prevents client-side JS access
-          secure: false,         // false for localhost, true for production HTTPS
-          sameSite: 'lax',       // 'lax' for localhost, 'none' for cross-domain
+          secure: true,         // false for localhost, true for production HTTPS
+          sameSite: 'none',       // 'lax' for localhost, 'none' for cross-domain
           path: '/',             // Cookie available across site
           maxAge: 60 * 60 * 1000 // 1 hour (matches JWT expiry)
         });
@@ -111,8 +111,8 @@ const userLogout = async (req, res) => {
     // Clear the cookie with the SAME options used when setting it
     res.clearCookie("token", {
       httpOnly: true,
-      secure: false,      // Must match login cookie settings
-      sameSite: 'lax',    // Must match login cookie settings
+      secure: true,      // Must match login cookie settings
+      sameSite: 'none',    // Must match login cookie settings
       path: '/'           // Must match login cookie settings
     });
 
