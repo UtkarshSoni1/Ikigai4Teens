@@ -43,7 +43,7 @@ app.use(cookieParser());
 app.use('/auth', authLimiter);
 app.use('/api', apiLimiter);
 
-connection();
+
 
 app.get('/',(req, res) => {
     res.send("Server  is live");
@@ -83,6 +83,7 @@ app.use(errorHandler);
 
 app.listen(port, '0.0.0.0', () => {
     console.log(`Server is running on port ${port}`);
+    connection();
 });
 
 export default app;
