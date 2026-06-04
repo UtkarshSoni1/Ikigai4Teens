@@ -33,7 +33,7 @@ app.use(cors(corsOptions));
 app.options(/.*/, cors(corsOptions));
 
 // Apply security middlewares after CORS so preflight requests always receive CORS headers
-applySecurity(app);
+// applySecurity(app);
 // Body parsers to populate req.body for JSON and form submissions
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
