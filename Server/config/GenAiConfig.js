@@ -154,7 +154,7 @@ const AiResponse = async (req, res) => {
 
     try {
       // Try gemini-2.5-flash first, with fallbacks if needed
-      const modelNames = ["gemini-2.5-flash", "gemini-2.0-flash-exp"];
+      const modelNames = ["gemini-2.5-flash", "gemini-2.0-flash"];
       let model;
       let geminiResponse;
       let lastError = null;
