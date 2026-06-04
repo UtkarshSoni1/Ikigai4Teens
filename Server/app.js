@@ -17,7 +17,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
-const port = process.env.VITE_API_URL || 5000;
+const port = process.env.PORT || 5000;
 // const parsedPort = Number(process.env.PORT);
 // const port = Number.isInteger(parsedPort) && parsedPort > 0 ? parsedPort : 5000;
 const clientOrigin = process.env.CLIENT_URL || 'http://localhost:5173';
